@@ -20,13 +20,6 @@ function validateMobileNumber($number) {
   return preg_match($pattern, $number);
 }
 
-// // Function to calculate age based on date of birth
-// function calculateAge($birthday) {
-//   $dobObj = new DateTime($birthday);
-//   $today = new DateTime();
-//   $age = $dobObj->diff($today)->y;
-//   return $age;
-// }
 
 // Initialize response array
 $response = array('success' => false, 'message' => '');
@@ -51,30 +44,40 @@ $response = array('success' => false, 'message' => '');
     elseif (!validateMobileNumber($contact)) {
         $response['message'] = 'Invalid mobile number format. Please enter a valid Philippine mobile number.';
     } 
-    
-    else if (isset($email)){
-
-        $validate_email = "SELECT COUNT(*) FROM profile WHERE email = :email";
-        $stmt = $conn->prepare($validate_email);
-        $stmt->bindParam(':email', $email);
-        $stmt->execute();
-
-        $email_res = $stmt->fetchColumn();
-
-        if ($email_res > 0) {
-            $response['message'] = "Email already exists in the database.";
-        } 
-        
-    }
-    
     else  {
+      $validate_email = "SELECT COUNT(*) FROM profile WHERE email = :email";
+      $stmt = $conn->prepare($validate_email);
+      $stmt->bindParam(':email', $email);
+      $stmt->execute();
+
+      $email_res = $stmt->fetchColumn();
+
+      // if ($email_res > 0) {
+      //     $response['message'] = "Email already exists in the database.";
+      // } 
+
+      $validate_contact = "SELECT COUNT(*) FROM profile WHERE contact = :contact";
+      $stmt = $conn->prepare($validate_contact);
+      $stmt->bindParam(':contact', $contact);
+      $stmt->execute();
+
+      $contact_res = $stmt->fetchColumn();
+
+      // if ($contact_res > 0) {
+      //     $response['message'] = "Email already exists in the database.";
+      // } 
+
         try {
             $stmt = $conn->prepare("INSERT INTO profile (name, email, contact, birthday, age, gender) VALUES (?, ?, ?, ?, ?, ?)");
             $stmt->execute([$name, $email, $contact, $birthday, $age, $gender]);
             $response['success'] = true;
             $response['message'] = 'Form submitted successfully.';
         } catch(PDOException $e) {
-            $response['message'] = 'Error submitting form: ' . $e->getMessage();
+            $errorMessage = $e->getMessage();
+            $startPos = strpos($errorMessage, "Duplicate entry '") + strlen("Duplicate entry '");
+            $endPos = strpos($errorMessage, "' for key");
+            $duplicateEntry = 'Duplicate entry' . substr($errorMessage, $startPos, $endPos - $startPos);
+            $response['message'] = 'Error submitting form: ' . $duplicateEntry;
         }
     }
     
