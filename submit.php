@@ -40,7 +40,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $age = calculateAge($birthday);
   $gender = $_POST['gender'];
 
-    // Client-side validation (JavaScript)
     if (empty($name) || empty($email) || empty($contact) || empty($birthday) || empty($age) || empty($gender)) {
         $response['message'] = 'All fields are required.';
     } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
