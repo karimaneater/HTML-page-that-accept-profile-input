@@ -1,4 +1,3 @@
-<?php include('submit.php');?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -13,7 +12,7 @@
 <body>
     <div class="container">
         <div class="row mt-5">
-            <form id="myForm" action="submit.php" method="POST">
+            <form id="myForm" method="POST" novalidate>
             
                 <div class="form-floating mb-3">
                     <input type="text" id="name" class="form-control" id="floatingInput" maxlength="255" placeholder="Name" name="name" value="" required>
@@ -62,10 +61,9 @@
     </div>
 </body>
 <script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/validate.js/0.13.1/validate.min.js"></script>
 <script src="js/submit.js"></script>
 <script src="js/age.js"></script>
-<script src="js/jbvalidator.js"></script>
-<script src="js/customValidation.js"></script>
 <script src="js/contactPrefix.js"></script>
 
 </html>
